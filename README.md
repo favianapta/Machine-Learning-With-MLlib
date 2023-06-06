@@ -111,7 +111,7 @@
   
   <img src="images/ML - Recommender.png" width="60%" height="60%">
   
-  ### Penjelasan
+  ### PENJELASAN
   
   
   
@@ -136,8 +136,8 @@
   BELUM DALAM PROSES
   <img src="images/Kode-1.png" width="60%" height="60%">
     
-  + Penjelasan
-     -
+  ### PENJELASAN
+  
      
 <!-- movie-recommendations.py -->
 # Movie Recommendations
@@ -162,5 +162,5 @@
   
   <img src="images/Kode-1.png" width="60%" height="60%">
     
-  + Penjelasan
-     -
+  ### PENJELASAN
+  
