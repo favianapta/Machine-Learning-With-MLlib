@@ -114,6 +114,80 @@
   ### PENJELASAN
   
   
+<!-- movie-recommendations.py -->
+# Movie Recommendations
+
+  ### Kode Sebelum di ubah
+
+  ```css
+  from pyspark.ml.evaluation import RegressionEvaluator
+  from pyspark.ml.recommendation import ALS
+  from pyspark.sql import Row
+
+  lines = spark.read.text("/data/ml-1m/ratings.dat").rdd
+  parts = lines.map(lambda row: row.value.split("::"))
+  ratingsRDD = parts.map(lambda p: Row(userId=int(p[0]), movieId=int(p[1]),
+                                       rating=int(p[2]), timestamp=int(p[3])))
+  ratings = spark.createDataFrame(ratingsRDD)
+  (training, test) = ratings.randomSplit([0.8, 0.2])
+
+  # Build the recommendation model using ALS on the training data
+  # Note we set cold start strategy to 'drop' to ensure we don't get NaN evaluation metrics
+  als = ALS(maxIter=5, regParam=0.01, userCol="userId", itemCol="movieId", ratingCol="rating")
+  model = als.fit(training)
+
+  # Evaluate the model by computing the RMSE on the test data
+  predictions = model.transform(test)
+  predictions.show()
+
+  import math
+  result = predictions.rdd.map(lambda row: row['prediction'] - row['rating']).map(lambda x: x*x).filter(lambda x: not math.isnan(x))
+  mse = result.reduce(lambda x,y: x+y)
+  ```
+     
+  ### Kode Setalah Perubahan di Google Collabs
+  
+  ```css
+  !pip install pyspark
+
+  from pyspark.sql import SparkSession
+  from pyspark.ml.evaluation import RegressionEvaluator
+  from pyspark.ml.recommendation import ALS
+  from pyspark.sql import Row
+
+  # Inisialisasi sesi Spark
+  spark = SparkSession.builder.appName("GoogleColabSpark").getOrCreate()
+
+  lines = spark.sparkContext.textFile("ratings.dat")
+  parts = lines.map(lambda row: row.split("::"))
+
+  # Konversi RDD ke DataFrame
+  ratingsRDD = parts.map(lambda p: Row(userId=int(p[0]), movieId=int(p[1]), rating=int(p[2]), timestamp=int(p[3])))
+  ratings = spark.createDataFrame(ratingsRDD)
+
+  # Split data menjadi training dan test set
+  (training, test) = ratings.randomSplit([0.8, 0.2])
+
+  # Build the recommendation model using ALS on the training data
+  # Note we set cold start strategy to 'drop' to ensure we don't get NaN evaluation metrics
+  als = ALS(maxIter=5, regParam=0.01, userCol="userId", itemCol="movieId", ratingCol="rating")
+  model = als.fit(training)
+
+  # Evaluate the model by computing the RMSE on the test data
+  predictions = model.transform(test)
+  predictions.show()
+
+  import math
+  result = predictions.rdd.map(lambda row: row['prediction'] - row['rating']).map(lambda x: x*x).filter(lambda x: not math.isnan(x))
+  mse = result.reduce(lambda x,y: x+y)
+  ```
+    
+  ### HASIL
+  
+  <img src="images/Movie Recommendations.png" width="60%" height="60%">
+    
+  ### PENJELASAN
+  
   
 <!-- mllib_random_forrest.ipynb -->
 # MLlib Random Forest
@@ -139,28 +213,5 @@
   ### PENJELASAN
   
      
-<!-- movie-recommendations.py -->
-# Movie Recommendations
 
-  ### Kode Sebelum di ubah
-
-  ```css
-  mylist = [(50, "DataFrame"),(60, "pandas")]
-  myschema = ['col1', 'col2']
-  ```
-     
-  ### Kode Setalah Perubahan di Google Collabs
-  
-  ```css
-  mylist = [(50, "DataFrame"),(60, "pandas")]
-  myschema = ['col1', 'col2']
-  ```
-    
-  ### HASIL
-  
-  BELUM DALAM PROSES
-  
-  <img src="images/Kode-1.png" width="60%" height="60%">
-    
-  ### PENJELASAN
   
