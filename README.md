@@ -190,7 +190,7 @@
   
   
 <!-- mllib_random_forrest.ipynb -->
-# MLlib Random Forest
+<!-- # MLlib Random Forest
 
   ### Kode Sebelum di ubah
 
@@ -210,7 +210,7 @@
   BELUM DALAM PROSES
   <img src="images/Kode-1.png" width="60%" height="60%">
     
-  ### PENJELASAN
+  ### PENJELASAN -->
   
      
 
